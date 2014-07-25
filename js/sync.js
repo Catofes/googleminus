@@ -51,6 +51,7 @@ CeSync = function ()
 	//Get value from localstorage.
 	this.onLoad = function()
 	{
+		if(localStorage.getItem('CeSync')==null)this.onSave();
 		this.value = JSON.parse(localStorage.getItem('CeSync'));
 	}
 
