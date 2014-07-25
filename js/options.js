@@ -97,6 +97,7 @@ init_filtering_mode_radios();
 $("#Login").click(function(){
 	cesync.value.username=$("#username")[0].value;
 	cesync.value.password=$("#password")[0].value;
+	cesync.onSave();
 	$("#status").text("信息已经保存，请刷新本页面。");
 });
 $("#Logout").click(function(){
