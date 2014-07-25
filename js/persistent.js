@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  * @returns {Array} keywords array
  */
 function get_keywords() {
-    return JSON.parse(localStorage.getItem(KEYWORDS_KEY));
+return cesync.GetValue();
 }
 
 /**
@@ -40,13 +40,11 @@ function get_keywords() {
  * @param {String} new_keyword
  */
 function add_keyword(new_keyword) {
-    var keywords = localStorage.getItem(KEYWORDS_KEY);
-    keywords = JSON.parse(keywords);
-
-    keywords.push(new_keyword);
-
-    keywords = JSON.stringify(keywords);
-    localStorage.setItem(KEYWORDS_KEY, keywords);
+	record=new CeRecord;
+	record.Value=new_keyword;
+	record.CheckCode="+";
+	cesync.value.data.push(record);
+	cesync.onSave();
 }
 
 /**
@@ -54,16 +52,20 @@ function add_keyword(new_keyword) {
  * @param {String} removed_keyword
  */
 function remove_keyword(removed_keyword) {
-    var keywords = localStorage.getItem(KEYWORDS_KEY);
-    keywords = JSON.parse(keywords);
-
-    var index = keywords.indexOf(removed_keyword);
-    if (index > -1) {
-        keywords.splice(index, 1);
-    }
-
-    keywords = JSON.stringify(keywords);
-    localStorage.setItem(KEYWORDS_KEY, keywords);
+	for(i=0;i<cesync.value.data.length;i++){
+		if(cesync.value.data[i]==null)continue;
+		if(removed_keyword===cesync.value.data[i].Value&&cesync.value.data[i].IfLove==100)
+		  break;
+	}
+	if(i<cesync.value.data.length){
+		if(cesync.value.data[i].CheckCode=="+")
+		  cesync.value.data[i]=null;
+		else{
+			cesync.value.data[i].CheckCode="*";
+			cesync.value.data[i].IfLove=101;
+		}
+	}
+	cesync.onSave();
 }
 
 /**
@@ -71,7 +73,7 @@ function remove_keyword(removed_keyword) {
  * @returns {String}
  */
 function get_filtering_mode() {
-    return localStorage[FILTERING_MODE_KEY];
+	return localStorage[FILTERING_MODE_KEY];
 }
 
 /**
@@ -79,5 +81,6 @@ function get_filtering_mode() {
  * @param {String} filtering_mode
  */
 function set_filtering_mode(filtering_mode) {
-    localStorage[FILTERING_MODE_KEY] = filtering_mode;
+	localStorage[FILTERING_MODE_KEY] = filtering_mode;
 }
+

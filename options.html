@@ -5,6 +5,8 @@
     <title>Google minus options</title>
 </head>
 <body>
+<script src="js/jquery.js"></script>
+<script src="js/sync.js"></script>
 <h3>Keywords</h3>
 <table id="keywords_table"></table>
 New key word: <input id="new_keyword_text_field" type="text" />
@@ -12,6 +14,17 @@ New key word: <input id="new_keyword_text_field" type="text" />
 <h3>Filtering mode</h3>
 <input type="radio" name="sex" id="all_out_radio">All out<br>
 <input type="radio" name="sex" id="blacken_keywords_radio">Blacken keywords
+<h3>Login</h3>
+username: <input id="username" type="text"><br>
+password: <input id="password" type="password"><br>
+<input id="Login" type="button" value="Login">
+<input id="Logout" type="button" value="Logout"><br>
+or Logout while Clear Local Storage.<br><br>
+Login Status:
+<div id="status"></div><br>
+Last Sync (EDT 美国东部时间):
+<div id="time"></div><br>
+<input id="syncnow" type="button" value="SyncNow">
 <script src="js/persistent.js"></script>
 <script src="js/options.js"></script>
 </body>

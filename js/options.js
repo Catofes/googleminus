@@ -5,6 +5,8 @@ var new_keyword_button = document.getElementById("new_keyword_button");
 var all_out_radio = document.getElementById("all_out_radio");
 var blacken_keywords_radio = document.getElementById("blacken_keywords_radio");
 
+//Prepare for CeSync;
+
 // Setup submit button listener
 new_keyword_button.onclick = function() {
     var i = keywords_table.rows.length;
@@ -91,3 +93,18 @@ function remove_a_row(keyword) {
 
 init_keywords_table();
 init_filtering_mode_radios();
+
+$("#Login").click(function(){
+	cesync.value.username=$("#username")[0].value;
+	cesync.value.password=$("#password")[0].value;
+	$("#status").text("信息已经保存，请刷新本页面。");
+});
+$("#Logout").click(function(){
+	cesync.init();
+	$("istatus").text("操作已经完成，请刷新本页面。");
+});
+$("#syncnow").click(function(){
+	cesync.pull(function(){$("#time").text(cesync.value.pullrequesttime)});
+});
+$("#status").text(cesync.value.logininfo);
+$("#time").text(cesync.value.pullrequesttime);
