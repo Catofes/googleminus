@@ -105,6 +105,7 @@ CeSync = function ()
 
 	this.pull = function(callback)
 	{
+		this.onLoad();
 		if(this.value.login===0)return ;
 		$.post(this.url+"/api/device.php?f=now",{ "ak" : this.value.accesskey }, 
 					function(data){
