@@ -12,7 +12,7 @@ CeRecord = function() {
 CeSync = function ()
 {
 	_this=this;
-	this.url="http://ce.tau.xyz";
+	this.url="https://web.emoticon.moe";
 	this.version="0.0.1";
 	this.appid=1;
 	//Store All Info Into Here.
@@ -25,7 +25,7 @@ CeSync = function ()
 		login:0,
 		logininfo:"",
 		userid:0,
-		data:[],
+		data:[null],
 	}
 	//Clear Info.
 	this.init = function()
@@ -39,7 +39,7 @@ CeSync = function ()
 			login:0,
 			logininfo:"",
 			userid:0,
-			data:[],
+			data:[null],
 		}
 		this.onSave();
 	}
@@ -149,10 +149,13 @@ CeSync = function ()
 			if(this.value.data[i]==null)continue;
 			switch(this.value.data[i].CheckCode){
 				case "+":
-					$.post(this.url+"/api/favor.php?f=add",{"ak": this.value.accesskey, "v": this.value.data[i].Value,"l":this.value.data[i].IfLove,"t": this.value.pullrequesttime},
+					var tempdata=$.extend(true,{},this.value.data[i]);
+					this.value.data[i]=null;
+					$.post(this.url+"/api/favor.php?f=add",{"ak": this.value.accesskey, "v": tempdata.Value,"l":tempdata.IfLove,"t": tempdata.pullrequesttime},
 								function(data){
 									if(data.code===101){
-										_this.value.data.splice(_i,1);
+										if(_this.value.data[data.Result.Id]!=null)
+										  _this.value.data.push(_this.value.data[data.Result.Id]);
 										_this.value.data[data.Result.Id]=$.extend(true, {}, data.Result);
 										_this.onSave();
 									}else{
@@ -164,7 +167,7 @@ CeSync = function ()
 					$.post(this.url+"/api/favor.php?f=modify",{"ak": this.value.accesskey, "i": this.value.data[i].Id, "v": this.value.data[i].Value, "l":this.value.data[i].IfLove, "t": this.value.pullrequesttime},
 								function(data){
 									if(data.code===101){
-										_this.value.data[_i]=$.extend(true, {}, data.Result);
+										_this.value.data[data.Result.Id]=$.extend(true, {}, data.Result);
 										_this.onSave();
 									}else{
 										console.log(data);
@@ -188,7 +191,7 @@ CeSync = function ()
 			if(this.value.data[i]==null)
 			  continue;
 			if(this.value.data[i].IfLove==100)
-			  result.push(this.value.data[i].Value);
+			  result.push(JSON.parse(this.value.data[i].Value));
 		}
 		return result;
 	}

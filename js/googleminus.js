@@ -5,14 +5,20 @@
  */
 
 /**
- * Dump an object's properties
- * @param  {Object} obj [Any objects]
+ * A keyword configuration
+ * @param {String} keyword
+ * @param {String} filtering_mode
+ * @param {String} param
+ * @constructor
  */
-function dump(obj) {
-    for (var i in obj) {
-        console.log(i + ": " + obj[i] + "\n");
-    }
+function KeywordConfig(keyword, filtering_mode, param) {
+    this.keyword = keyword;
+    this.filtering_mode = filtering_mode;
+    this.param = param
 }
+
+const FILTERING_MODES = ["all_out", "blacken_keywords"];
+const DEFAULT_FILTERING_MODE = "all_out";
 
 /**
  * Append one array to another
@@ -39,45 +45,63 @@ function my_contains(str1, str2) {
  * Whether a post div contains keyword
  * @param   {Array} keywords
  * @param   {HTMLDivElement} post_div
- * @returns {boolean}
+ * @returns {String} keyword being caught
  */
 function scrutinize_post_div(keywords, post_div) {
 	for (var i = 0 ; i < keywords.length ; ++i) {
 		var keyword = keywords[i];
 		if (my_contains(post_div.outerText, keyword)) {
-			return true;
+			return keyword;
 		}
 	}
-	return false;
+	return null;
 }
 
 /**
  * Wipe the post div out of stream completely
  * @param {HTMLDivElement} post_div
+ * @param {String} keyword
+ * @param {String} param
  */
-function all_out(post_div) {
-    post_div.innerHTML = "<div>Filtered</div>";
+function all_out(post_div, keyword, param) {
+    if (param === "completely") {
+        post_div.innerHTML = ""
+    }
+    else
+    {
+        post_div.innerHTML = "<div>Filtered " + build_black_cover(keyword) + "</div>";
+    }
 }
 
 /**
  * Replace keyword with black square in post div
  * @param {HTMLDivElement} post_div
- * @param {Array} keywords
+ * @param {Array} keyword
+ * @param {String} param
  */
-function blacken_keywords(post_div, keywords) {
-    for (var i = 0 ; i < keywords.length ; ++i) {
-        // Get keyword and build regex
-        var the_keyword = keywords[i],
-            regex = new RegExp(the_keyword, "g");
+function blacken_keywords(post_div, keyword, param) {
+    var regex = new RegExp(keyword, "g");
+    var replacement = (param === "") ? build_black_cover(keyword) : param;
 
-        // Build replacement with the same length
-        var replacement = new Array(the_keyword.length + 1).join("█");
+    // Replace the keyword
+    var raw_html = post_div.innerHTML;
+    post_div.innerHTML = raw_html.replace(regex, replacement);
+}
 
-        // Replace the keyword
-        var raw_html = post_div.innerHTML;
-        raw_html = raw_html.replace(regex, replacement);
-        post_div.innerHTML = raw_html;
-    }
+/**
+ * Build a span with keyword blacked out but still visible when on hover
+ * @param {String} keyword
+ * @returns {string} raw html for the span
+ */
+function build_black_cover(keyword) {
+    var replacement = new Array(keyword.length + 1).join("█");
+    return "<span title='" + keyword + "'>" + replacement + "</span>";
+}
+
+function auto_ignore(post_div, keyword, param) {
+    // TODO: simulate click
+    var options_span = post_div.getElementsByClassName(POST_OPTIONS_SPAN_CLASS_NAME)[0];
+    options_span.click();
 }
 
 /**
@@ -86,13 +110,13 @@ function blacken_keywords(post_div, keywords) {
 const STREAM_DIV_CLASS_NAME = "pga";
 const POST_DIV_CLASS_NAME = "Yp yt Xa";
 const ON_HOVER_POST_DIV_CLASS_NAME = "Yp yt Xa va";
+const POST_OPTIONS_SPAN_CLASS_NAME = "d-s xw if";
 
 /**
  * Main function
- * @param {Array} keywords
- * @param {String} filtering_mode
+ * @param {Array} keyword_configs
  */
-function filter(keywords, filtering_mode) {
+function filter(keyword_configs) {
     // Find stream div
     var stream_div = document.getElementsByClassName(STREAM_DIV_CLASS_NAME)[0];
 
@@ -106,25 +130,19 @@ function filter(keywords, filtering_mode) {
     my_append(all_post_divs, on_hover_post_divs);
 
     // Filter
-    for (var i = 0 ; i < all_post_divs.length ; ++i) {
-        var post_div = all_post_divs[i];
-        if (scrutinize_post_div(keywords, post_div)) {
-            console.log("---- Caught one!");
-            switch (filtering_mode) {
-                case "all_out": {
-                    all_out(post_div);
-                    break;
-                }
-                case "blacken_keywords": {
-                    blacken_keywords(post_div, keywords);
-                    break;
-                }
-                default:
-                {
-                    all_out(post_div);
-                }
-
-            }
+    var keyword_set = keyword_configs.map(function(config) {
+        return config.keyword;
+    });
+    all_post_divs.forEach(function (post_div) {
+        var keyword_caught = scrutinize_post_div(keyword_set, post_div);
+        if (keyword_caught !== null) {
+            var config_caught = keyword_configs.filter(function(config) {
+                return config.keyword === keyword_caught;
+            })[0];
+            var filtering_mode_caught = config_caught.filtering_mode;
+            var param_caught = config_caught.param;
+            console.log("[googleminus] Caught " + keyword_caught + ", executing mode " + filtering_mode_caught + " with param " + param_caught);
+            window[filtering_mode_caught](post_div, keyword_caught, param_caught);
         }
-    }
+    })
 }
