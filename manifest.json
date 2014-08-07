@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "gPlus Minus",
-	"version": "0.0.5",
+	"name": "Keyword Minus for Google Plus™",
+	"version": "0.0.6",
 	"author": "KTachibanaM,Catofes",
-	"description": "Filter keywords on Google+ webpage and hide corresponding posts",
+	"description": "Filter keywords on Google Plus™ webpage and hide corresponding posts",
 	"content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
 	"content_scripts": [
 	{
@@ -14,7 +14,7 @@
 		"128": "icon-128.png"
 	},
 	"background":{
-		"scripts":["js/persistent.js","js/jquery.js","js/sync.js"],
+		"scripts":["js/jquery.js","js/sync.js","js/persistent.js"],
 		"persistent": false
 	},
 	"options_page": "options.html",

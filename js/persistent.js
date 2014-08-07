@@ -32,7 +32,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  * @returns {Array} keywords array
  */
 function get_keywords() {
-return cesync.GetValue();
+	cesync.onLoad();
+	return cesync.GetValue();
 }
 
 /**

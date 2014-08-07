@@ -52,13 +52,32 @@ function scrutinize_post_div(keywords, post_div) {
 }
 
 /**
- * Filter the post div
- * @param {Array} keywords
+ * Wipe the post div out of stream completely
  * @param {HTMLDivElement} post_div
- * @param {String} filtering_mode
  */
-function filter_post_div(keywords, post_div, filtering_mode) {
+function all_out(post_div) {
     post_div.innerHTML = "<div>Filtered</div>";
+}
+
+/**
+ * Replace keyword with black square in post div
+ * @param {HTMLDivElement} post_div
+ * @param {Array} keywords
+ */
+function blacken_keywords(post_div, keywords) {
+    for (var i = 0 ; i < keywords.length ; ++i) {
+        // Get keyword and build regex
+        var the_keyword = keywords[i],
+            regex = new RegExp(the_keyword, "g");
+
+        // Build replacement with the same length
+        var replacement = new Array(the_keyword.length + 1).join("█");
+
+        // Replace the keyword
+        var raw_html = post_div.innerHTML;
+        raw_html = raw_html.replace(regex, replacement);
+        post_div.innerHTML = raw_html;
+    }
 }
 
 /**
@@ -91,7 +110,21 @@ function filter(keywords, filtering_mode) {
         var post_div = all_post_divs[i];
         if (scrutinize_post_div(keywords, post_div)) {
             console.log("---- Caught one!");
-            filter_post_div(keywords, post_div, filtering_mode);
+            switch (filtering_mode) {
+                case "all_out": {
+                    all_out(post_div);
+                    break;
+                }
+                case "blacken_keywords": {
+                    blacken_keywords(post_div, keywords);
+                    break;
+                }
+                default:
+                {
+                    all_out(post_div);
+                }
+
+            }
         }
     }
 }
