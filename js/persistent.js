@@ -7,8 +7,8 @@ if (localStorage.getItem(KEYWORDS_KEY) === null) {
 }
 
 /**
- * Get keywords
- * @returns {Array} keywords array
+ * Get all keyword configurations
+ * @returns {Array} KeywordConfig array
  */
 function get_keyword_configs() {
 	cesync.onLoad();
@@ -16,8 +16,8 @@ function get_keyword_configs() {
 }
 
 /**
- * Add a new keyword in keywords
- * @param {String} new_keyword
+ * Read keyword configurations, manipulate and save
+ * @param func function that does the manipulation
  */
 function add_keyword_config(new_keyword) {
 	record=new CeRecord;
@@ -28,8 +28,8 @@ function add_keyword_config(new_keyword) {
 }
 
 /**
- * Remove a keyword from keywords
- * @param {String} removed_keyword
+ * Add a keyword configuration
+ * @param {KeywordConfig} new_config
  */
 function remove_keyword_config(removed_keyword) {
 	for(i=0;i<cesync.value.data.length;i++){
