@@ -1,38 +1,5 @@
 <!DOCTYPE html>
 <html>
-<<<<<<< HEAD
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Google minus options</title>
-</head>
-<body>
-<h3>You need to refresh Google+ web page for all changes to work!</h3>
-<table id="keywords_table">
-    <tr>
-        <th>Keyword</th>
-        <th>Filtering mode</th>
-        <th>Parameter</th>
-    </tr>
-</table>
-<h3>Login</h3>
-username: <input id="username" type="text"><br>
-password: <input id="password" type="password"><br>
-<input id="Login" type="button" value="Login">
-<input id="Logout" type="button" value="Logout"><br>
-<a href="https://web.emoticon.moe" target="view_window">Regist</a><br>
-Logout while Clear Local Storage.<br><br>
-Login Status:
-<div id="status"></div><br>
-Last Sync (EDT 美国东部时间):
-<div id="time"></div><br>
-<input id="syncnow" type="button" value="SyncNow">
-<script src="js/jquery.js"></script>
-<script src="js/googleminus.js"></script>
-<script src="js/sync.js"></script>
-<script src="js/persistent.js"></script>
-<script src="js/options.js"></script>
-</body>
-=======
 	<head lang="en">
 		<meta charset="UTF-8">
 		<title>Google minus options</title>
@@ -43,21 +10,51 @@ Last Sync (EDT 美国东部时间):
 		<div class="container table-striped table-hover"  style="width:600px">
 			<br>
 			<ul class="nav nav-pills" role="tablist">	
-				<li role="presentation" class="active"><a href="#">Keyword</a></li>
-				<li role="presentation"><a href="#">Account</a></li>
+				<li role="presentation" class="active"><a href="#keyword-info" role="tab" data-toggle="pill">Keyword</a></li>
+				<li role="presentation"><a href="#account-info" role="tab" data-toggle="pill" >Account</a></li>
+				<li role="presentation"><a href="#sync-info" role="tab" data-toggle="pill" >Sync</a></li>
 			</ul>
 			<br>
-			<div class="panel panel-default">
-				<div class="table-responsive">
-					<table class="table" id="keywords_table">
-						<tr>
-							<th>Keyword</th>
-							<th>Filtering mode</th>
-							<th>Parameter</th>
-							<th>Operate</th>
-						</tr>
-					</table>
-					<h5 style="margin-left:10px">You need to refresh Google+ web page for all changes to work!</h5>
+			<div class="tab-content">
+				<div class="tab-pane fade in active" id="keyword-info">
+					<div class="panel panel-default">
+						<div class="table-responsive">
+							<table class="table" id="keywords_table">
+								<tr>
+									<th>Keyword</th>
+									<th>Filtering mode</th>
+									<th>Parameter</th>
+									<th>Operate</th>
+								</tr>
+							</table>
+							<h5 style="margin-left:10px">You need to refresh Google+ web page for all changes to work!</h5>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade " id="account-info">
+					<div  class="panel panel-default">
+						<div class="container" style="width:300px">
+							<h3 class="form-signin-heading">登录</h3>
+							<div class="alert alert-success" id="status" role="alert">Login Status:</div>
+							<input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="" autocomplete="off">
+							<input type="password" id="password" name="passwd" class="form-control" placeholder="Password" required="">
+							<br>
+							<button id="Login" class="btn btn-lg btn-primary btn-block" >Login</button>
+							<button id="Logout" class="btn btn-lg btn-warning btn-block" >Logout</button>
+							<h5> Logout will clear local storage.</h5>
+							<h5> Click <a href="https://web.emoticon.moe/" target="view_window" >Here</a> to register.</h5>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade " id="sync-info">
+					<div class="panel panel-default">
+						<div class="container" style="width:500px">
+							<h3 class="form-signin-heading"> 同步信息</h3>
+							<div id="time" class="alert alert-info" role="alert">Last Sync Time (EDT):</div>
+							<button id="syncnow" class="btn btn-lg btn-warning btn-block" >Sync Now</button>
+							<br>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -65,8 +62,8 @@ Last Sync (EDT 美国东部时间):
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/bootstrap-select.min.js"></script>
 		<script src="js/googleminus.js"></script>
+		<script src="js/sync.js"></script>
 		<script src="js/persistent.js"></script>
 		<script src="js/options.js"></script>
 	</body>
->>>>>>> KT
 </html>

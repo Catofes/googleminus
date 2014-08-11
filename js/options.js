@@ -148,14 +148,19 @@ $("#Login").click(function(){
 	cesync.value.username=$("#username")[0].value;
 	cesync.value.password=$("#password")[0].value;
 	cesync.onSave();
-	$("#status").text("信息已经保存，请刷新本页面。");
+	cesync.onLogin(function(result){
+		if(result==true)
+		  $("#status").text("Login Status : Login Success");
+		else
+		  $("#status").text("Login Status : Login Failed");
+	});
 });
 $("#Logout").click(function(){
 	cesync.init();
-	$("istatus").text("操作已经完成，请刷新本页面。");
+	$("#status").text("Login Status : Logout Success");
 });
 $("#syncnow").click(function(){
-	cesync.pull(function(){$("#time").text(cesync.value.pullrequesttime)});
+	cesync.pull(function(){$("#time").text("Last Sync Time (EDT) :  "+cesync.value.pullrequesttime)});
 });
-$("#status").text(cesync.value.logininfo);
-$("#time").text(cesync.value.pullrequesttime);
+$("#status").text("Login Status : "+cesync.value.logininfo);
+$("#time").text("Last Sync Time (EDT) :  "+cesync.value.pullrequesttime);

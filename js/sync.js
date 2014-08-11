@@ -21,9 +21,9 @@ CeSync = function ()
 		password:"",
 		accesskey:"",
 		deviceid:"",
-		pullrequesttime:"",
+		pullrequesttime:"Never Synced",
 		login:0,
-		logininfo:"",
+		logininfo:"No Login",
 		userid:0,
 		data:[null],
 	}
@@ -35,9 +35,9 @@ CeSync = function ()
 			password:"",
 			accesskey:"",
 			deviceid:"",
-			pullrequesttime:"",
+			pullrequesttime:"Never Synced",
 			login:0,
-			logininfo:"",
+			logininfo:"No Login",
 			userid:0,
 			data:[null],
 		}
@@ -55,7 +55,7 @@ CeSync = function ()
 		this.value = JSON.parse(localStorage.getItem('CeSync'));
 	}
 
-	this.onLogin = function()
+	this.onLogin = function(callback)
 	{
 		if(this.value.username==="")return ;
 		$.post(this.url+"/api/account.php?f=login",{ "u": this.value.username, "p": this.value.password, "k": 1},
@@ -65,12 +65,16 @@ CeSync = function ()
 							_this.value.userid=data.UserId;
 							_this.value.login=1;
 							console.log("登陆成功。");
-							_this.value.logininfo="登陆成功。";
+							_this.value.logininfo="Login Success";
 							_this.onSave();
+							if(callback!=null)
+							  callback(true);
 						}else{
 							console.log(data);
-							_this.value.logininfo="登陆失败。";
+							_this.value.logininfo="Login Failed";
 							_this.value.login=0;
+							if(callback!=null)
+							  callback(false);
 						}
 					},"json");
 		this.onSave();
